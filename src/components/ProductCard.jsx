@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 import toast from "react-hot-toast";
-import "../styles/ProductCard.css"
+import "../styles/ProductCard.css";
 
 const ProductCard = ({ product, inStock = true }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -25,29 +25,27 @@ const ProductCard = ({ product, inStock = true }) => {
   };
 
   const variants = getVariantOptions();
-  
-  // Initialize with empty string, will be set in useEffect
+
   const [selectedVariant, setSelectedVariant] = useState("");
 
-  // Set default variant on component mount and when product changes
   useEffect(() => {
     if (inStock && variants.length > 0) {
-      if (product.category && product.category.includes('clothing')) {
-        setSelectedVariant('M');
+      if (product.category && product.category.includes("clothing")) {
+        setSelectedVariant("M");
       } else {
         setSelectedVariant(variants[0]);
       }
     }
-  }, [product.id]);
+  }, [product.id, inStock, product.category, variants]);
 
   // Handle adding product to cart
   const handleAddToCart = () => {
     if (!inStock) return;
-    
-    const productToAdd = selectedVariant 
+
+    const productToAdd = selectedVariant
       ? { ...product, variant: selectedVariant }
       : product;
-      
+
     dispatch(addCart(productToAdd));
     toast.success(`Added ${product.title} to cart`);
   };
@@ -57,18 +55,18 @@ const ProductCard = ({ product, inStock = true }) => {
     const baseClass = "variant-btn";
     const selectedClass = selectedVariant === variant ? "selected" : "";
     const variantClass = `variant-${variant.toLowerCase()}`;
-    
+
     return `${baseClass} ${variantClass} ${selectedClass}`;
   };
 
   // Render star rating
   const renderRating = () => {
     if (!product.rating) return null;
-    
+
     const { rate, count } = product.rating;
     const fullStars = Math.floor(rate);
     const hasHalfStar = rate - fullStars >= 0.5;
-    
+
     return (
       <div className="rating-container">
         <div className="rating-stars">
@@ -90,17 +88,19 @@ const ProductCard = ({ product, inStock = true }) => {
 
   // Get variant label based on product category
   const getVariantLabel = () => {
-    if (!product.category) return 'Select Option';
-    
+    if (!product.category) return "Select Option";
+
     const category = product.category.toLowerCase();
-    if (category.includes('clothing')) return 'Select Size';
-    if (category === 'jewelery') return 'Select Material';
-    return 'Select Option';
+    if (category.includes("clothing")) return "Select Size";
+    if (category === "jewelery") return "Select Material";
+    return "Select Option";
   };
 
   return (
-    <div 
-      className={`card product-card h-100 ${isHovered ? 'shadow' : 'shadow-sm'}`}
+    <div
+      className={`card product-card h-100 ${
+        isHovered ? "shadow" : "shadow-sm"
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -110,20 +110,16 @@ const ProductCard = ({ product, inStock = true }) => {
             <span className="badge bg-danger fs-5 p-2">Out of Stock</span>
           </div>
         )}
-        <img
-          className="card-img-top"
-          src={product.image}
-          alt={product.title}
-        />
+        <img className="card-img-top" src={product.image} alt={product.title} />
       </div>
-      
+
       <div className="card-body d-flex flex-column">
         <h5 className="product-title" title={product.title}>
           {product.title}
         </h5>
-        
+
         {renderRating()}
-        
+
         <div className="price-container">
           <span className="fs-5 fw-bold">${product.price}</span>
           {inStock && (
@@ -133,14 +129,14 @@ const ProductCard = ({ product, inStock = true }) => {
             </span>
           )}
         </div>
-        
+
         {variants.length > 0 && (
           <div className="variant-container">
             <label className="form-label fw-medium mb-1">
               <i className="bi bi-palette-fill me-1"></i>
               {getVariantLabel()}
             </label>
-            
+
             <div className="variant-options">
               {variants.map((variant) => (
                 <button
@@ -154,7 +150,7 @@ const ProductCard = ({ product, inStock = true }) => {
                 </button>
               ))}
             </div>
-            
+
             {!selectedVariant && inStock && (
               <div className="text-muted small mt-2">
                 <i className="bi bi-info-circle me-1"></i>
@@ -163,7 +159,7 @@ const ProductCard = ({ product, inStock = true }) => {
             )}
           </div>
         )}
-        
+
         <div className="mt-auto d-flex flex-wrap gap-2">
           <Link
             to={`/product/${product.id}`}
@@ -172,7 +168,7 @@ const ProductCard = ({ product, inStock = true }) => {
             <i className="bi bi-eye me-1"></i>
             Details
           </Link>
-          
+
           {inStock ? (
             <button
               className="btn btn-primary flex-grow-1 btn-cart"
@@ -183,10 +179,7 @@ const ProductCard = ({ product, inStock = true }) => {
               Add to Cart
             </button>
           ) : (
-            <button
-              className="btn btn-secondary flex-grow-1"
-              disabled
-            >
+            <button className="btn btn-secondary flex-grow-1" disabled>
               <i className="bi bi-x-circle me-1"></i>
               Out of Stock
             </button>
