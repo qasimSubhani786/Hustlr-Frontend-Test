@@ -36,7 +36,7 @@ const ProductCard = ({ product, inStock = true }) => {
         setSelectedVariant(variants[0]);
       }
     }
-  }, [product.id, inStock, product.category, variants]);
+  }, []);
 
   // Handle adding product to cart
   const handleAddToCart = () => {
