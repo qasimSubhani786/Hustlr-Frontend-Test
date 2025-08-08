@@ -53,8 +53,8 @@
     "web3": "^1.3.3"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node api.js && concurrently \"npm run server\" \"npm run client\"",
+    "dev": "node api.js && concurrently \"npm run server\" \"npm run client\"",
     "server": "node ./api/server.js",
     "client": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
